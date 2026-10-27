@@ -107,7 +107,7 @@ def test_created_context_cleans_up_after_exception() -> None:
             raise RuntimeError("application failure")
     with Agent37Sandbox(instance_id=instance_id) as attached:
         with pytest.raises(httpx.HTTPStatusError) as error:
-            attached.execute("true")
+            attached._request("GET", f"/v1/instances/{instance_id}")
         assert error.value.response.status_code == 404
 
 
