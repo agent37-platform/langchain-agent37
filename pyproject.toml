@@ -1,0 +1,60 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "langchain-agent37"
+version = "0.1.0"
+description = "Agent37 sandbox backend for LangChain Deep Agents"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.11,<4.0"
+authors = [{name = "Agent37"}]
+dependencies = ["deepagents>=0.7.32,<0.8", "httpx>=0.28.1,<1"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+]
+
+[project.optional-dependencies]
+cli = ["deepagents-code>=0.2.2,<0.3; python_version >= '3.14' and python_version < '3.15'"]
+
+[project.entry-points."deepagents_code.sandbox_providers"]
+agent37 = "langchain_agent37.provider:Agent37Provider"
+
+[project.urls]
+Homepage = "https://www.agent37.com"
+Documentation = "https://github.com/agent37-platform/langchain-agent37#readme"
+Repository = "https://github.com/agent37-platform/langchain-agent37"
+Issues = "https://github.com/agent37-platform/langchain-agent37/issues"
+
+[dependency-groups]
+dev = ["pytest>=8", "pytest-asyncio>=1", "langchain-tests>=1.1.9", "langchain-openai>=1.7.2,<2", "ruff>=0.15", "mypy>=1.15", "build", "twine", "python-dotenv"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["langchain_agent37"]
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+markers = ["integration: requires a funded Agent37 API key", "llm: requires OPENAI_API_KEY", "slow: runs a quiet command for 200 seconds", "cli: requires the cli extra and Python 3.14"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+files = ["langchain_agent37"]
+
+[[tool.mypy.overrides]]
+module = ["deepagents_code.*"]
+ignore_missing_imports = true
